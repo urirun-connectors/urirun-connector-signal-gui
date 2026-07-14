@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "urirun-connector-signal-gui"
+version = "0.1.0"
+description = "Autonomiczny operator Signala nad KVM (mózg nad rękami): observe→understand→reply→verify→log"
+requires-python = ">=3.10"
+dependencies = ["urirun", "litellm"]
+[project.entry-points."urirun.bindings"]
+signal-gui = "urirun_connector_signal_gui.core:urirun_bindings"
+[tool.setuptools]
+packages = ["urirun_connector_signal_gui"]

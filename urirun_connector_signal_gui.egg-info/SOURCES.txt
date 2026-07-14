@@ -1,0 +1,10 @@
+pyproject.toml
+tests/test_signal_gui.py
+urirun_connector_signal_gui/__init__.py
+urirun_connector_signal_gui/core.py
+urirun_connector_signal_gui.egg-info/PKG-INFO
+urirun_connector_signal_gui.egg-info/SOURCES.txt
+urirun_connector_signal_gui.egg-info/dependency_links.txt
+urirun_connector_signal_gui.egg-info/entry_points.txt
+urirun_connector_signal_gui.egg-info/requires.txt
+urirun_connector_signal_gui.egg-info/top_level.txt
