@@ -2,7 +2,10 @@ from urirun_connector_signal_gui import core
 
 def test_bindings():
     b = core.urirun_bindings()["bindings"]
-    assert any("host/command/reply-next-contextual" in k for k in b)
+    uri = "signal-gui://host/command/reply-next-contextual"
+    assert uri in b
+    assert b[uri]["meta"]["gated"] is True
+    assert "signal-gui://host/host/command/reply-next-contextual" not in b
 
 def test_envelope_never_raises(monkeypatch):
     monkeypatch.setattr(core, "_kvm", lambda *a, **k: {"ok": True})

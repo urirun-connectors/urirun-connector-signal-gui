@@ -87,8 +87,9 @@ _SCENE_PROMPT = (
 )
 
 
-@conn.handler("host/command/reply-next-contextual", isolated=True,
-              meta={"label": "Autonomiczny operator Signala: obserwuj→zrozum(z historią)→odpisz kontekstowo→zweryfikuj→zaloguj"})
+@conn.handler("command/reply-next-contextual", isolated=True,
+              meta={"label": "Autonomiczny operator Signala: obserwuj→zrozum(z historią)→odpisz kontekstowo→zweryfikuj→zaloguj",
+                    "gated": True})
 def reply_next_contextual(node: str = "laptop", dry_run: bool = True, project: str = "",
                           history_depth: int = 5, ticket: str = "") -> dict[str, Any]:
     """Pełna pętla operatora. dry_run=True → NIE wysyła (podgląd draftu). dry_run=False → wysyła.

@@ -1,2 +1,0 @@
-[urirun.bindings]
-signal-gui = urirun_connector_signal_gui.core:urirun_bindings
