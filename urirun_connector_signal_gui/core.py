@@ -59,11 +59,32 @@ def _llm_vision(b64: str, prompt: str, context: dict | None = None) -> dict:
     import litellm
     if context and context.get("ticket"):
         prompt = f"[ticket:{context.get('ticket')}] {prompt}"
-    resp = litellm.completion(model=_VISION_MODEL, temperature=0.3, messages=[{
-        "role": "user", "content": [
-            {"type": "text", "text": prompt},
-            {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}},
-        ]}])
+
+    model = os.environ.get("SIGNAL_GUI_VISION_MODEL") or _VISION_MODEL
+    api_base = os.environ.get("SIGNAL_GUI_LLM_API_BASE") or os.environ.get("URIRUN_LLM_API_BASE") or os.environ.get("OPENAI_API_BASE")
+    if api_base and not (model.startswith("openai/") or model.startswith("openrouter/")):
+        model = f"openai/{model}"
+
+    kwargs: dict[str, Any] = {
+        "model": model,
+        "temperature": 0.3,
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}},
+                ],
+            }
+        ],
+    }
+    if api_base:
+        kwargs["api_base"] = api_base
+    api_key = os.environ.get("SIGNAL_GUI_LLM_API_KEY") or os.environ.get("OQLLM_API_KEY") or os.environ.get("OPENAI_API_KEY")
+    if api_key:
+        kwargs["api_key"] = api_key
+
+    resp = litellm.completion(**kwargs)
     txt = resp.choices[0].message.content or ""
     if "```" in txt:
         txt = txt.split("```")[1].removeprefix("json").strip()
