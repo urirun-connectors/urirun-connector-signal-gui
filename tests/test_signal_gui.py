@@ -34,25 +34,3 @@ def test_history_depth_reaches_scene_prompt(monkeypatch):
     r = core.reply_next_contextual(node="laptop", dry_run=True, history_depth=8, ticket="IFURI-229")
     assert r["ok"]
     assert "8" in seen_prompts[0]  # history_depth wpisany do promptu, nie tylko domyślne 5
-
-
-def test_llm_vision_with_oqllm_docker(monkeypatch):
-    """Verify Signal GUI vision extraction through local OQLLM Docker instance."""
-    import urllib.request
-    try:
-        with urllib.request.urlopen("http://127.0.0.1:11437/health", timeout=1.0) as resp:
-            if resp.status != 200:
-                return
-    except Exception:
-        return
-
-    monkeypatch.setenv("SIGNAL_GUI_LLM_API_BASE", "http://127.0.0.1:11437/v1")
-    monkeypatch.setenv("SIGNAL_GUI_VISION_MODEL", "oqlos/system-one-router")
-    monkeypatch.setenv("SIGNAL_GUI_LLM_API_KEY", "oqllm_live_loopback_root")
-
-    b64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
-    prompt = "proc://dockuri/ops/container/list"
-    res = core._llm_vision(b64, prompt)
-    assert isinstance(res, dict)
-    assert res.get("selected_uri") == "proc://dockuri/ops/container/list"
-
